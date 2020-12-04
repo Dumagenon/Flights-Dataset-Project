@@ -17,21 +17,6 @@ body {
     background-color: #eee;
 }
 
-.tooltip {
-    position: fixed;
-    padding: 4px 10px 5px;
-    border: 1px solid #bbc0c4;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 14px;
-    color: #333;
-    background: #fff;
-    box-shadow: 0px 0px 7px rgba(0, 0, 0, .09);
-}
-
-[data-tooltip] {
-    cursor: help;
-}
 .container {
     width: 100%;
     padding: 0 15px;

@@ -2,23 +2,19 @@ const path = require('path');
 const HTMLPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const WorkboxPlugin = require('workbox-webpack-plugin');
 
 const isDev = process.env.NADE_ENV === 'development';
 
-const fileName = (ext) => `[name].${ext}`;
-
 module.exports = {
   context: path.resolve(__dirname, 'src'),
-  mode: "development",
   entry: {
-    main: ['@babel/polyfill', './index.js']
+    main: ['@babel/polyfill', './index.js'],
+    sw: './sw.js'
   },
   output: {
-    filename: `./js/${fileName('js')}`,
+    filename: `./js/[name].js`,
     path: path.resolve(__dirname, 'build')
   },
-  devtool: 'source-map',
   resolve: {
     alias: {
       '@service': path.resolve(__dirname, 'src/services'),
@@ -30,6 +26,7 @@ module.exports = {
       chunks: 'all'
     }
   },
+  devtool: 'source-map',
   devServer: {
     contentBase: path.resolve(__dirname, 'build'),
     historyApiFallback: true,
@@ -41,16 +38,13 @@ module.exports = {
     }
   },
   plugins: [
-    // new CleanWebpackPlugin(),
+    new CleanWebpackPlugin(),
     new HTMLPlugin({
       template: './index.html',
-      filename: 'index.html',
-      minify: {
-        collapseWhitespace: !isDev
-      }
+      filename: 'index.html'
     }),
     new MiniCssExtractPlugin({
-      filename: `./css/${fileName('css')}`
+      filename: `./css/[name].css`
     })
   ],
   module: {
@@ -61,7 +55,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: /node-modules/,
+        exclude: /(node-modules|sw\.js)/,
         use: {
           loader: 'babel-loader',
           options: {

@@ -21,8 +21,8 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').then(() => {
-          console.log('[Service Worker] Registered');
+        navigator.serviceWorker.register('./js/sw.js').then(reg => {
+          console.log('[Service Worker]', reg);
         }).catch(registrationError => {
           console.log('SW registration failed: ', registrationError);
         });

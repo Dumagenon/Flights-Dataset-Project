@@ -1,5 +1,4 @@
 const express = require('express');
-const path = require('path');
 const config = require('config');
 const createError = require('http-errors');
 
@@ -7,13 +6,11 @@ const app = express();
 
 app.use(express.json({ extends: true }));
 
-// app.get('/', async (req, res, next) => {
-//   res.sendFile(path.resolve(__dirname, 'client/build/index.html'));
-// });
-
 app.use('/api/flights', require('./routes/flights.router'));
 
-// app.use('/', express.static('client/build'));
+if (process.env.NODE_ENV === 'production') {
+  app.use('/', express.static('client/build'));
+}
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

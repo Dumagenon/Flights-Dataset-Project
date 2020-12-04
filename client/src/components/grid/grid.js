@@ -100,7 +100,7 @@ class GridComponent {
           </div>
         </div>
       `;
-    });
+    }).catch(err => console.log("Fetch err:", err.message));
   }
 }
 
