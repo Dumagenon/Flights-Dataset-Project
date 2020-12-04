@@ -6,13 +6,14 @@ const createError = require('http-errors');
 const app = express();
 
 app.use(express.json({ extends: true }));
-app.use('/static', express.static(path.resolve(__dirname, 'client', 'static')));
 
 // app.get('/', async (req, res, next) => {
-//   res.sendFile(path.resolve(__dirname, 'client', 'src', 'index.html'));
+//   res.sendFile(path.resolve(__dirname, 'client/build/index.html'));
 // });
 
 app.use('/api/flights', require('./routes/flights.router'));
+
+// app.use('/', express.static('client/build'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
