@@ -2,14 +2,14 @@ const path = require('path');
 const HTMLPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const isDev = process.env.NADE_ENV === 'development';
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
-    main: ['@babel/polyfill', './index.js'],
-    sw: './sw.js'
+    main: ['@babel/polyfill', './index.js']
   },
   output: {
     filename: `./js/[name].js`,
@@ -38,13 +38,21 @@ module.exports = {
     }
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new HTMLPlugin({
       template: './index.html',
       filename: 'index.html'
     }),
     new MiniCssExtractPlugin({
       filename: `./css/[name].css`
+    }),
+    new CleanWebpackPlugin(),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'sw.js'),
+          to: path.resolve(__dirname, 'build', 'sw.js')
+        }
+      ]
     })
   ],
   module: {
@@ -55,7 +63,7 @@ module.exports = {
       },
       {
         test: /\.js$/,
-        exclude: /(node-modules|sw\.js)/,
+        exclude: /node-modules/,
         use: {
           loader: 'babel-loader',
           options: {
