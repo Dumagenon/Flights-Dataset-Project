@@ -49,8 +49,8 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, 'sw.js'),
-          to: path.resolve(__dirname, 'build', 'sw.js')
+          from: path.resolve(__dirname, 'public'),
+          to: path.resolve(__dirname, 'build')
         }
       ]
     })
