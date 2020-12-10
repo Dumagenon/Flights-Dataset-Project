@@ -1,21 +1,27 @@
 const router = require('express').Router();
 const dataSet = require('../flights-db.json');
-const DBProcess = require('../processing');
 const speed = require('../processing/utils');
-const sort = DBProcess.create('sort');
+const SortProcess = require('../processing/sort');
+const SearchProcess = require('../processing/search');
 
-// console.log(require('../flights-db.json').sort((a, b) => +a.distance > +b.distance ? 1 : -1).slice(0, 10).reduce((sum, el) => sum += el.distance + ' ', ''));
-console.log(speed(() => console.log(sort.quickSort(require('../flights-db.json').slice(0, 100000), 'distance').slice(0, 30).reduce((sum, el) => sum += el.distance + ' ', ''))));
-// console.log(require('../flights-db.json').slice(0, 10).reduce((sum, el) => sum += el.distance + ' ', ''));
+// Show own sort method result + speed
+console.log('Speed of sorting: ',
+  speed(() => console.log('Distance of every array item:',
+      new SortProcess(1, 'asc').shakerSort(
+        dataSet.slice(0, 30), 'distance'
+      ).reduce((sum, el) => sum += el.distance + ' ', '')
+    )
+  )
+);
 
 router.get('/', async (req, res) => {
   try {
-    const search = DBProcess.create('search');
-    const data = search.optionsSearch(dataSet, { dayOfMonth: '8', cancelled: '1', origin: 'LAS' });
-    const data2 = search.querySearch(dataSet, /^\s*$/i);
+    const search = new SearchProcess(1), sort = new SortProcess(2, 'asc');
+    const data = sort.quickSort(search.optionsSearch(dataSet, req.query), 'distance');
+    // const data2 = Se.querySearch(dataSet, /^\s*$/i);
 
     res.status(200).json({
-      items: [...data.slice(0, 5), ...data2.slice(0, 7)],
+      items: [...data.slice(0, 10)],
       total: data.length
     });
   } catch (err) {

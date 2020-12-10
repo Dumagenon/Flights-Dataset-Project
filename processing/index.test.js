@@ -1,4 +1,5 @@
-const DBProcess = require('./index');
+const sort = require('../processing/sort');
+const search = require('../processing/search');
 
 // Get flight from JSON file
 function getData(num) {
@@ -6,7 +7,6 @@ function getData(num) {
 }
 
 describe('DB Processes - Search:', function () {
-  const search = DBProcess.create('search');
   const dataSet = getData(10);
 
   test('should search all cancelled items', () => {
@@ -37,7 +37,6 @@ describe('DB Processes - Search:', function () {
 });
 
 describe('DB Processes - Sorts:', function () {
-  const sort = DBProcess.create('sort');
   let res;
 
   function objectToStringByKey(data) {
